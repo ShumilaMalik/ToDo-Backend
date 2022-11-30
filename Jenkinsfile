@@ -4,24 +4,27 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                sh "java --version"
+                echo 'Building..'
             }
         }
         stage('Test') {
             steps {
-                sh "java --version"
+                echo 'Testing..'
             }
         }
-        stage('Release') {
+        stage('Deploy') {
             steps {
-              withCredentials([usernamePassword(credentialsId: 'dockerhubcredentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
-                sh '''
-                docker login -u $USERNAME -p $PASSWORD
-                docker build -t shumimalik/backendjenkins:${BUILD_NUMBER} .
-                docker push shumimalik/backendjenkins:${BUILD_NUMBER}
-                '''
+                 withCredentials([usernamePassword(credentialsId: 'dockerhubcredentails2', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]){
+                  sh'''
+                  docker login -u $USERNAME -p $PASSWORD
+                  docker build -t shumimalik/backendjenkins:${BUILD_NUMBER} .
+                  docker push shumimalik/backendjenkins:${BUILD_NUMBER}
+                  docker-compose down
+                  docker pull shumimalik/backendjenkins:${BUILD_NUMBER}
+                  docker-compose up
+                  ''' 
+                }
                 
-              }
             }
         }
     }
