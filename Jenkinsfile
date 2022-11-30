@@ -19,6 +19,9 @@ pipeline {
                   docker login -u $USERNAME -p $PASSWORD
                   docker build -t shumimalik/backendjenkins:${BUILD_NUMBER} .
                   docker push shumimalik/backendjenkins:${BUILD_NUMBER}
+                  docker-compose down
+                  docker pull 152028/project-demo:${BUILD_NUMBER}
+                  docker-compose up
                   ''' 
                 }
                 
